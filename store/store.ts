@@ -4,7 +4,7 @@ import { FETCH_DATA_FAILURE, FETCH_DATA_REQUEST, FETCH_DATA_SUCCESS } from './ac
 
 export interface RootStore {
   data?: Array<StoryType>
-  isLoading?: boolean
+  isLoading: boolean
   error?: string
 }
 

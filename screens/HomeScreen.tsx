@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { ActivityIndicator, Divider, Title } from 'react-native-paper'
-import { FlatList, View } from 'react-native'
+import { Divider, Title } from 'react-native-paper'
+import { FlatList, RefreshControl, View } from 'react-native'
 import axios from 'axios'
 import { fetchDataFailure, fetchDataRequest, fetchDataSuccess } from '../store/actions'
 import { RootStore } from '../store/store'
@@ -44,21 +44,26 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Title style={styles.title}>Random HackerNews Stories</Title>
-      {isLoading ? (
-        <ActivityIndicator size='large' color='#FF6600' />
-      ) : (
-        <FlatList
-          data={storeData}
-          style={styles.list}
-          extraData={storeData}
-          ListFooterComponent={<View style={styles.listFooter} />}
-          ItemSeparatorComponent={() => <Divider />}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }: { item: StoryType }) => {
-            return <Story {...item} />
-          }}
-        />
-      )}
+
+      <FlatList
+        data={storeData}
+        style={styles.list}
+        refreshControl={
+          <RefreshControl
+            tintColor='#FF6600'
+            colors={['#FF6600']}
+            refreshing={isLoading}
+            onRefresh={() => fetchData()}
+          />
+        }
+        extraData={storeData}
+        ListFooterComponent={<View style={styles.listFooter} />}
+        ItemSeparatorComponent={() => <Divider />}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }: { item: StoryType }) => {
+          return <Story {...item} />
+        }}
+      />
     </SafeAreaView>
   )
 }
